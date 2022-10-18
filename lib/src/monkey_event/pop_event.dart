@@ -9,7 +9,7 @@ class PopEventFactory extends MonkeyEventFactory<PopEvent> {
 
   @override
   PopEvent? create(WidgetsBinding binding) {
-    final navigatorState = rootNavigatorState(binding);
+    final navigatorState = rootNavigatorState(binding.renderViewElement!);
     return PopEvent(navigatorState);
   }
 }
@@ -28,4 +28,9 @@ class PopEvent extends MonkeyEvent {
 
   @override
   void paintEvent(Canvas canvas) {}
+
+  @override
+  String toString() {
+    return 'PopEvent()';
+  }
 }

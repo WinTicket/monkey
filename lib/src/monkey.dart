@@ -19,26 +19,43 @@ class Monkey {
 
   OverlayEntry? _overlayEntry;
   Timer? _timer;
-  bool _running = false;
 
-  void start({
+  bool _running = false;
+  bool get running => _running;
+
+  static const paintThrottle = Duration(milliseconds: 200);
+
+  Future<void> start({
     MonkeySource source = const MonkeySourceRandom(),
     Duration duration = const Duration(minutes: 1),
-    Duration throttle = const Duration(milliseconds: 400),
-  }) {
+    Duration throttle = const Duration(milliseconds: 200),
+    bool verbose = false,
+  }) async {
     if (_running) return;
     assert(duration > Duration.zero);
     assert(throttle > Duration.zero);
     _running = true;
 
-    final navigator = rootNavigatorState(_controller.binding);
+    final navigator =
+        rootNavigatorState(_controller.binding.renderViewElement!);
     final overlay = navigator.overlay!;
     final overlayEntry = _createOverlayEntry();
     _overlayEntry = overlayEntry;
     overlay.insert(overlayEntry);
 
     _timer = Timer(duration, stop);
-    _run(source: source, throttle: throttle);
+
+    while (_running) {
+      final event = source.nextEvent(_controller.binding);
+      if (verbose) {
+        debugPrint(event.toString());
+      }
+      _painter.value = _MonkeyEventPainter(event);
+      await event.injectEvent(_controller);
+      await Future<void>.delayed(throttle);
+      _painter.value = null;
+      await Future<void>.delayed(paintThrottle);
+    }
   }
 
   void stop() {
@@ -47,19 +64,6 @@ class Monkey {
     _timer = null;
     _overlayEntry?.remove();
     _overlayEntry = null;
-  }
-
-  Future<void> _run({
-    required MonkeySource source,
-    required Duration throttle,
-  }) async {
-    while (_running) {
-      await TestAsyncUtils.guard(() => Future<void>.delayed(throttle));
-      final event = source.nextEvent(_controller.binding);
-      _painter.value = _MonkeyEventPainter(event);
-      await TestAsyncUtils.guard(() => event.injectEvent(_controller));
-      _painter.value = null;
-    }
   }
 
   OverlayEntry _createOverlayEntry() {

@@ -10,15 +10,15 @@ class TapAtEventFactory extends MonkeyEventFactory<TapAtEvent> {
   @override
   TapAtEvent? create(WidgetsBinding binding) {
     final element = randomElement(
-      binding,
+      binding.renderViewElement!,
       test: (e) =>
           e.widget is GestureDetector &&
           (e.widget as GestureDetector).onTap != null,
     );
     if (element == null) return null;
-    final renderBox = getRenderBox(element);
-    if (renderBox == null) return null;
-    final location = renderBox.size.center(Offset.zero);
+    final location =
+        getElementPoint(element, (size) => size.center(Offset.zero));
+    if (location == null) return null;
     return TapAtEvent(location);
   }
 }
@@ -37,5 +37,10 @@ class TapAtEvent extends MonkeyEvent {
   void paintEvent(Canvas canvas) {
     final paint = Paint()..color = Colors.red;
     canvas.drawCircle(location, 8, paint);
+  }
+
+  @override
+  String toString() {
+    return 'TapAtEvent(location: $location)';
   }
 }
