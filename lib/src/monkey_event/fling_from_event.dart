@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monkey/src/random.dart';
@@ -56,8 +58,37 @@ class FlingFromEvent extends MonkeyEvent {
     final paint = Paint()
       ..color = Colors.pink
       ..strokeWidth = 4;
-    canvas.drawCircle(startLocation, 8, paint);
-    canvas.drawLine(startLocation, startLocation + offset, paint);
+
+    final p1 = startLocation + offset;
+    final p2 = startLocation;
+    final dX = p2.dx - p1.dx;
+    final dY = p2.dy - p1.dy;
+
+    const arrowSize = 30;
+    const arrowAngle = 25 * math.pi / 180;
+
+    final angle = math.atan2(dY, dX);
+    canvas.drawLine(
+      p1,
+      Offset(
+        p2.dx - arrowSize * math.cos(angle) * 0.5,
+        p2.dy - arrowSize * math.sin(angle) * 0.5,
+      ),
+      paint,
+    );
+
+    final path = Path()
+      ..moveTo(
+        p2.dx - arrowSize * math.cos(angle - arrowAngle),
+        p2.dy - arrowSize * math.sin(angle - arrowAngle),
+      )
+      ..lineTo(p2.dx, p2.dy)
+      ..lineTo(
+        p2.dx - arrowSize * math.cos(angle + arrowAngle),
+        p2.dy - arrowSize * math.sin(angle + arrowAngle),
+      )
+      ..close();
+    canvas.drawPath(path, paint);
   }
 
   @override
