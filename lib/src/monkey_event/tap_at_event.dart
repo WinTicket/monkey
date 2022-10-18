@@ -35,7 +35,7 @@ class TapAtEvent extends MonkeyEvent {
 
   @override
   void paintEvent(Canvas canvas) {
-    final paint = Paint()..color = Colors.red;
+    final paint = Paint()..color = Colors.blue;
     canvas.drawCircle(location, 8, paint);
   }
 

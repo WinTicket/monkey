@@ -28,7 +28,7 @@ class Monkey {
   Future<void> start({
     MonkeySource source = const MonkeySourceRandom(),
     Duration duration = const Duration(minutes: 1),
-    Duration throttle = const Duration(milliseconds: 200),
+    Duration throttle = const Duration(milliseconds: 300),
     bool verbose = false,
   }) async {
     if (_running) return;
