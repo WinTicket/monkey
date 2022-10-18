@@ -28,20 +28,20 @@ class FlingFromEventFactory extends MonkeyEventFactory<FlingFromEvent> {
 }
 
 class FlingFromEvent extends MonkeyEvent {
-  FlingFromEvent(this.scrollable, this.startLocation, this.box);
+  FlingFromEvent(this.scrollable, this.location, this.box);
 
   final Scrollable scrollable;
-  final Offset startLocation;
+  final Offset location;
   final RenderBox box;
 
   late final Offset offset = () {
     Offset offset;
     switch (scrollable.axis) {
       case Axis.horizontal:
-        offset = Offset(box.size.width * 0.4, 0);
+        offset = Offset(box.size.width * 0.3, 0);
         break;
       case Axis.vertical:
-        offset = Offset(0, box.size.height * 0.4);
+        offset = Offset(0, box.size.height * 0.3);
         break;
     }
     offset = offset * (random.nextBool() ? -1 : 1);
@@ -50,7 +50,8 @@ class FlingFromEvent extends MonkeyEvent {
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
-    await controller.flingFrom(startLocation, offset, offset.distance * 10);
+    await controller.flingFrom(
+        location - offset, offset * 2, offset.distance * 10);
   }
 
   @override
@@ -59,8 +60,8 @@ class FlingFromEvent extends MonkeyEvent {
       ..color = Colors.pink
       ..strokeWidth = 4;
 
-    final p1 = startLocation + offset;
-    final p2 = startLocation;
+    final p1 = location + offset;
+    final p2 = location - offset;
     final dX = p2.dx - p1.dx;
     final dY = p2.dy - p1.dy;
 
@@ -93,6 +94,6 @@ class FlingFromEvent extends MonkeyEvent {
 
   @override
   String toString() {
-    return 'FlingFromEvent(startLocation: $startLocation, offset: $offset)';
+    return 'FlingFromEvent(startLocation: $location, offset: $offset)';
   }
 }
