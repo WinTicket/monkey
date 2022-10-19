@@ -7,14 +7,14 @@ import 'package:monkey/src/random.dart';
 import '../element.dart';
 import '../monkey_event.dart';
 
-class DragFromEvent extends MonkeyEvent {
-  DragFromEvent(
+class FlingFromEvent extends MonkeyEvent {
+  FlingFromEvent(
     this.startLocation,
     this.offset,
     this.scrollable,
   );
 
-  static DragFromEvent? randomFromBinding(WidgetsBinding binding) {
+  static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
       test: (e) {
@@ -49,7 +49,7 @@ class DragFromEvent extends MonkeyEvent {
     }
     halfOffset = halfOffset * (random.nextBool() ? -1 : 1);
 
-    return DragFromEvent(
+    return FlingFromEvent(
       location - halfOffset,
       halfOffset * 2,
       (element as StatefulElement).state as ScrollableState,
@@ -62,10 +62,10 @@ class DragFromEvent extends MonkeyEvent {
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
-    await controller.timedDragFrom(
+    await controller.flingFrom(
       startLocation,
       offset,
-      const Duration(milliseconds: 100),
+      offset.distance * 10,
     );
     while (scrollable.position.isScrollingNotifier.value) {
       await Future.delayed(const Duration(milliseconds: 100));
