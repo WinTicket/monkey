@@ -8,7 +8,7 @@ class TapAtEvent extends MonkeyEvent {
   TapAtEvent(this.location);
 
   static TapAtEvent? randomFromBinding(WidgetsBinding binding) {
-    final element = randomElement(
+    final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) =>
           e.widget is GestureDetector &&
@@ -32,7 +32,7 @@ class TapAtEvent extends MonkeyEvent {
   @override
   void paintEvent(Canvas canvas) {
     final paint = Paint()..color = Colors.blue;
-    canvas.drawCircle(location, 8, paint);
+    canvas.drawCircle(location, 16, paint);
   }
 
   @override

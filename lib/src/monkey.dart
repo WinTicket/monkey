@@ -37,7 +37,7 @@ class Monkey {
     _running = true;
 
     final navigator =
-        rootNavigatorState(_controller.binding.renderViewElement!);
+        findRootNavigatorState(_controller.binding.renderViewElement!);
     final overlay = navigator.overlay!;
     final overlayEntry = _createOverlayEntry();
     _overlayEntry = overlayEntry;

@@ -15,7 +15,7 @@ class FlingFromEvent extends MonkeyEvent {
   );
 
   static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
-    final element = randomElement(
+    final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) {
         if (e.widget is! Scrollable) return false;

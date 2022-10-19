@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'random.dart';
 
-Element? randomElement(
+Element? chooseRandomElement(
   Element rootElement, {
   bool Function(Element)? test,
   bool skipOffstage = true,
@@ -26,7 +26,7 @@ Element? randomElement(
   return target;
 }
 
-NavigatorState rootNavigatorState(Element rootElement) {
+NavigatorState findRootNavigatorState(Element rootElement) {
   final allElements = collectAllElementsFrom(
     rootElement,
     skipOffstage: true,
