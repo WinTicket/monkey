@@ -9,10 +9,9 @@ import '../monkey_event.dart';
 
 class FlingFromEvent extends MonkeyEvent {
   FlingFromEvent(
-    this.scrollable,
-    this.location,
-    this.box,
-    this.speedFactor,
+    this.startLocation,
+    this.offset,
+    this.speed,
   );
 
   static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
@@ -27,39 +26,35 @@ class FlingFromEvent extends MonkeyEvent {
     final location =
         getElementPoint(element, (size) => size.center(Offset.zero));
     if (location == null) return null;
+
+    Offset halfOffset;
+    switch (scrollable.axis) {
+      case Axis.horizontal:
+        halfOffset = Offset(box.size.width * 0.3, 0);
+        break;
+      case Axis.vertical:
+        halfOffset = Offset(0, box.size.height * 0.3);
+        break;
+    }
+    halfOffset = halfOffset * (random.nextBool() ? -1 : 1);
+
     return FlingFromEvent(
-      scrollable,
-      location,
-      box,
-      random.nextInt(10) + 1,
+      location - halfOffset,
+      location + halfOffset,
+      halfOffset.direction * (random.nextInt(10) + 1),
     );
   }
 
-  final Scrollable scrollable;
-  final Offset location;
-  final RenderBox box;
-  final double speedFactor;
-
-  late final Offset offset = () {
-    Offset offset;
-    switch (scrollable.axis) {
-      case Axis.horizontal:
-        offset = Offset(box.size.width * 0.3, 0);
-        break;
-      case Axis.vertical:
-        offset = Offset(0, box.size.height * 0.3);
-        break;
-    }
-    offset = offset * (random.nextBool() ? -1 : 1);
-    return offset;
-  }();
+  final Offset startLocation;
+  final Offset offset;
+  final double speed;
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
     await controller.flingFrom(
-      location - offset,
-      offset * 2,
-      offset.distance * 10,
+      startLocation,
+      offset,
+      speed,
     );
   }
 
@@ -69,8 +64,8 @@ class FlingFromEvent extends MonkeyEvent {
       ..color = Colors.pink
       ..strokeWidth = 4;
 
-    final p1 = location + offset;
-    final p2 = location - offset;
+    final p1 = startLocation;
+    final p2 = startLocation + offset;
     final dX = p2.dx - p1.dx;
     final dY = p2.dy - p1.dy;
 
@@ -103,6 +98,6 @@ class FlingFromEvent extends MonkeyEvent {
 
   @override
   String toString() {
-    return 'FlingFromEvent(startLocation: $location, offset: $offset)';
+    return 'FlingFromEvent(startLocation: $startLocation, offset: $offset, speed: $speed)';
   }
 }
