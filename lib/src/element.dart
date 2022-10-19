@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -48,4 +49,22 @@ RenderBox? getElementRenderBox(Element element) {
     return null;
   }
   return element.renderObject! as RenderBox;
+}
+
+bool isElementHitTestable(
+  Element element,
+  WidgetsBinding binding, {
+  Alignment alignment = Alignment.center,
+}) {
+  final box = getElementRenderBox(element);
+  if (box == null) return false;
+  final absoluteOffset = box.localToGlobal(alignment.alongSize(box.size));
+  final hitResult = HitTestResult();
+  binding.hitTest(hitResult, absoluteOffset);
+  for (final HitTestEntry entry in hitResult.path) {
+    if (entry.target == element.renderObject) {
+      return true;
+    }
+  }
+  return false;
 }

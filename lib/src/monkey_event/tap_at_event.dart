@@ -12,7 +12,8 @@ class TapAtEvent extends MonkeyEvent {
       binding.renderViewElement!,
       test: (e) =>
           e.widget is GestureDetector &&
-          (e.widget as GestureDetector).onTap != null,
+          (e.widget as GestureDetector).onTap != null &&
+          isElementHitTestable(e, binding),
     );
     if (element == null) return null;
     final location =

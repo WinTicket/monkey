@@ -8,12 +8,17 @@ import '../element.dart';
 import '../monkey_event.dart';
 
 class FlingFromEvent extends MonkeyEvent {
-  FlingFromEvent(this.scrollable, this.location, this.box);
+  FlingFromEvent(
+    this.scrollable,
+    this.location,
+    this.box,
+    this.speedFactor,
+  );
 
   static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
-      test: (e) => e.widget is Scrollable,
+      test: (e) => e.widget is Scrollable && isElementHitTestable(e, binding),
     );
     if (element == null) return null;
     final scrollable = element.widget as Scrollable;
@@ -22,12 +27,18 @@ class FlingFromEvent extends MonkeyEvent {
     final location =
         getElementPoint(element, (size) => size.center(Offset.zero));
     if (location == null) return null;
-    return FlingFromEvent(scrollable, location, box);
+    return FlingFromEvent(
+      scrollable,
+      location,
+      box,
+      random.nextInt(10) + 1,
+    );
   }
 
   final Scrollable scrollable;
   final Offset location;
   final RenderBox box;
+  final double speedFactor;
 
   late final Offset offset = () {
     Offset offset;
@@ -46,7 +57,10 @@ class FlingFromEvent extends MonkeyEvent {
   @override
   Future<void> injectEvent(WidgetController controller) async {
     await controller.flingFrom(
-        location - offset, offset * 2, offset.distance * 10);
+      location - offset,
+      offset * 2,
+      offset.distance * 10,
+    );
   }
 
   @override
