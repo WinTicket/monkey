@@ -14,7 +14,7 @@ typedef RandomMonkeyEventFactory = MonkeyEvent? Function(
 
 class MonkeySourceRandom extends MonkeySource {
   const MonkeySourceRandom({
-    this.factorieWeights = defaultFactoryWeights,
+    this.factoryWeights = defaultFactoryWeights,
   });
 
   static const defaultFactoryWeights = <RandomMonkeyEventFactory, int>{
@@ -23,7 +23,7 @@ class MonkeySourceRandom extends MonkeySource {
     PopEvent.fromBinding: 2,
   };
 
-  final Map<RandomMonkeyEventFactory, int> factorieWeights;
+  final Map<RandomMonkeyEventFactory, int> factoryWeights;
 
   @override
   MonkeyEvent nextEvent(WidgetsBinding binding) {
@@ -36,10 +36,10 @@ class MonkeySourceRandom extends MonkeySource {
   }
 
   RandomMonkeyEventFactory _randomFactory() {
-    final sumOfWeight = factorieWeights.values.fold(0, (prev, e) => prev + e);
+    final sumOfWeight = factoryWeights.values.fold(0, (prev, e) => prev + e);
     var rnd = random.nextInt(sumOfWeight);
     RandomMonkeyEventFactory? eventFactory;
-    for (final entry in factorieWeights.entries) {
+    for (final entry in factoryWeights.entries) {
       if (rnd < entry.value) {
         eventFactory = entry.key;
         break;
