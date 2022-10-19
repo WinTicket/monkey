@@ -40,8 +40,8 @@ class FlingFromEvent extends MonkeyEvent {
 
     return FlingFromEvent(
       location - halfOffset,
-      location + halfOffset,
-      halfOffset.direction * (random.nextInt(10) + 1),
+      halfOffset * 2,
+      halfOffset.distance * (random.nextInt(10) + 1),
     );
   }
 
