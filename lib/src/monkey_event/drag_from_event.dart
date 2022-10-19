@@ -17,7 +17,17 @@ class DragFromEvent extends MonkeyEvent {
   static DragFromEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
-      test: (e) => e.widget is Scrollable && isElementHitTestable(e, binding),
+      test: (e) {
+        if (e.widget is! Scrollable) return false;
+        final position =
+            ((e as StatefulElement).state as ScrollableState).position;
+        if (!position.hasContentDimensions ||
+            (position.minScrollExtent == 0.0 &&
+                position.maxScrollExtent == 0.0)) {
+          return false;
+        }
+        return isElementHitTestable(e, binding);
+      },
     );
     if (element == null) return null;
     final scrollable = element.widget as Scrollable;
