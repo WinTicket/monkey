@@ -7,11 +7,10 @@ import 'package:monkey/src/random.dart';
 import '../element.dart';
 import '../monkey_event.dart';
 
-class FlingFromEventFactory extends MonkeyEventFactory<FlingFromEvent> {
-  const FlingFromEventFactory();
+class FlingFromEvent extends MonkeyEvent {
+  FlingFromEvent(this.scrollable, this.location, this.box);
 
-  @override
-  FlingFromEvent? create(WidgetsBinding binding) {
+  static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
       test: (e) => e.widget is Scrollable,
@@ -25,10 +24,6 @@ class FlingFromEventFactory extends MonkeyEventFactory<FlingFromEvent> {
     if (location == null) return null;
     return FlingFromEvent(scrollable, location, box);
   }
-}
-
-class FlingFromEvent extends MonkeyEvent {
-  FlingFromEvent(this.scrollable, this.location, this.box);
 
   final Scrollable scrollable;
   final Offset location;

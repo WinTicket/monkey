@@ -4,18 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import '../element.dart';
 import '../monkey_event.dart';
 
-class PopEventFactory extends MonkeyEventFactory<PopEvent> {
-  const PopEventFactory();
+class PopEvent extends MonkeyEvent {
+  PopEvent(this.navigatorState);
 
-  @override
-  PopEvent? create(WidgetsBinding binding) {
+  static PopEvent fromBinding(WidgetsBinding binding) {
     final navigatorState = rootNavigatorState(binding.renderViewElement!);
     return PopEvent(navigatorState);
   }
-}
-
-class PopEvent extends MonkeyEvent {
-  PopEvent(this.navigatorState);
 
   final NavigatorState navigatorState;
 

@@ -4,11 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../element.dart';
 import '../monkey_event.dart';
 
-class TapAtEventFactory extends MonkeyEventFactory<TapAtEvent> {
-  const TapAtEventFactory();
+class TapAtEvent extends MonkeyEvent {
+  TapAtEvent(this.location);
 
-  @override
-  TapAtEvent? create(WidgetsBinding binding) {
+  static TapAtEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
       test: (e) =>
@@ -21,10 +20,6 @@ class TapAtEventFactory extends MonkeyEventFactory<TapAtEvent> {
     if (location == null) return null;
     return TapAtEvent(location);
   }
-}
-
-class TapAtEvent extends MonkeyEvent {
-  TapAtEvent(this.location);
 
   final Offset location;
 

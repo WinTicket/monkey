@@ -8,33 +8,37 @@ import '../monkey_event/tap_at_event.dart';
 import '../monkey_source.dart';
 import '../random.dart';
 
+typedef RandomMonkeyEventFactory = MonkeyEvent? Function(
+  WidgetsBinding binding,
+);
+
 class MonkeySourceRandom extends MonkeySource {
   const MonkeySourceRandom({
     this.factorieWeights = defaultFactoryWeights,
   });
 
-  static const defaultFactoryWeights = <MonkeyEventFactory, int>{
-    TapAtEventFactory(): 15,
-    FlingFromEventFactory(): 5,
-    PopEventFactory(): 2,
+  static const defaultFactoryWeights = <RandomMonkeyEventFactory, int>{
+    TapAtEvent.randomFromBinding: 15,
+    FlingFromEvent.randomFromBinding: 5,
+    PopEvent.fromBinding: 2,
   };
 
-  final Map<MonkeyEventFactory, int> factorieWeights;
+  final Map<RandomMonkeyEventFactory, int> factorieWeights;
 
   @override
   MonkeyEvent nextEvent(WidgetsBinding binding) {
     MonkeyEvent? event;
     while (event == null) {
       TestAsyncUtils.guardSync();
-      event = _randomFactory().create(binding);
+      event = _randomFactory()(binding);
     }
     return event;
   }
 
-  MonkeyEventFactory _randomFactory() {
+  RandomMonkeyEventFactory _randomFactory() {
     final sumOfWeight = factorieWeights.values.fold(0, (prev, e) => prev + e);
     var rnd = random.nextInt(sumOfWeight);
-    MonkeyEventFactory? eventFactory;
+    RandomMonkeyEventFactory? eventFactory;
     for (final entry in factorieWeights.entries) {
       if (rnd < entry.value) {
         eventFactory = entry.key;
