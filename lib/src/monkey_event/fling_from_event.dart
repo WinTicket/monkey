@@ -38,7 +38,7 @@ class FlingFromEvent extends MonkeyEvent {
     if (location == null) return null;
 
     Offset halfOffset;
-    final offsetFactor = random.nextDouble() * 0.4;
+    final offsetFactor = random.nextDouble() * 0.2;
     switch (scrollable.axis) {
       case Axis.horizontal:
         halfOffset = Offset(box.size.width * offsetFactor, 0);
