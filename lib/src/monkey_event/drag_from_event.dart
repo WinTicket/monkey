@@ -7,14 +7,14 @@ import 'package:monkey/src/random.dart';
 import '../element.dart';
 import '../monkey_event.dart';
 
-class FlingFromEvent extends MonkeyEvent {
-  FlingFromEvent(
+class DragFromEvent extends MonkeyEvent {
+  DragFromEvent(
     this.startLocation,
     this.offset,
-    this.speed,
+    this.scrollable,
   );
 
-  static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
+  static DragFromEvent? randomFromBinding(WidgetsBinding binding) {
     final element = randomElement(
       binding.renderViewElement!,
       test: (e) => e.widget is Scrollable && isElementHitTestable(e, binding),
@@ -28,34 +28,38 @@ class FlingFromEvent extends MonkeyEvent {
     if (location == null) return null;
 
     Offset halfOffset;
+    final offsetFactor = random.nextDouble() * 0.4;
     switch (scrollable.axis) {
       case Axis.horizontal:
-        halfOffset = Offset(box.size.width * 0.3, 0);
+        halfOffset = Offset(box.size.width * offsetFactor, 0);
         break;
       case Axis.vertical:
-        halfOffset = Offset(0, box.size.height * 0.3);
+        halfOffset = Offset(0, box.size.height * offsetFactor);
         break;
     }
     halfOffset = halfOffset * (random.nextBool() ? -1 : 1);
 
-    return FlingFromEvent(
+    return DragFromEvent(
       location - halfOffset,
       halfOffset * 2,
-      halfOffset.distance * (random.nextInt(10) + 1),
+      (element as StatefulElement).state as ScrollableState,
     );
   }
 
   final Offset startLocation;
   final Offset offset;
-  final double speed;
+  final ScrollableState scrollable;
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
-    await controller.flingFrom(
+    await controller.timedDragFrom(
       startLocation,
       offset,
-      speed,
+      const Duration(milliseconds: 100),
     );
+    while (scrollable.position.isScrollingNotifier.value) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
   }
 
   @override
@@ -98,6 +102,6 @@ class FlingFromEvent extends MonkeyEvent {
 
   @override
   String toString() {
-    return 'FlingFromEvent(startLocation: $startLocation, offset: $offset, speed: $speed)';
+    return 'FlingFromEvent(startLocation: $startLocation, offset: $offset)';
   }
 }

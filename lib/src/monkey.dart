@@ -51,7 +51,7 @@ class Monkey {
         debugPrint(event.toString());
       }
       _painter.value = _MonkeyEventPainter(event);
-      await event.injectEvent(_controller);
+      await Future.microtask(() => event.injectEvent(_controller));
       await Future<void>.delayed(throttle);
       _painter.value = null;
       await Future<void>.delayed(paintThrottle);

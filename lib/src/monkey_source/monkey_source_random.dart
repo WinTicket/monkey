@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../monkey_event.dart';
-import '../monkey_event/fling_from_event.dart';
+import '../monkey_event/drag_from_event.dart';
 import '../monkey_event/pop_event.dart';
 import '../monkey_event/tap_at_event.dart';
 import '../monkey_source.dart';
@@ -19,7 +19,7 @@ class MonkeySourceRandom extends MonkeySource {
 
   static const defaultFactoryWeights = <RandomMonkeyEventFactory, int>{
     TapAtEvent.randomFromBinding: 15,
-    FlingFromEvent.randomFromBinding: 5,
+    DragFromEvent.randomFromBinding: 5,
     PopEvent.fromBinding: 2,
   };
 
