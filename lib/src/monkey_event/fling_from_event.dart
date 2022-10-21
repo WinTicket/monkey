@@ -11,7 +11,6 @@ class FlingFromEvent extends MonkeyEvent {
   FlingFromEvent(
     this.startLocation,
     this.offset,
-    this.scrollable,
   );
 
   static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
@@ -52,24 +51,20 @@ class FlingFromEvent extends MonkeyEvent {
     return FlingFromEvent(
       location - halfOffset,
       halfOffset * 2,
-      (element as StatefulElement).state as ScrollableState,
     );
   }
 
   final Offset startLocation;
   final Offset offset;
-  final ScrollableState scrollable;
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
     await controller.flingFrom(
       startLocation,
       offset,
-      offset.distance * 10,
+      offset.distance * 5,
     );
-    while (scrollable.position.isScrollingNotifier.value) {
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
+    await Future.delayed(const Duration(milliseconds: 200));
   }
 
   @override
