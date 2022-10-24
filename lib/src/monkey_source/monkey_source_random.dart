@@ -20,11 +20,11 @@ class MonkeySourceRandom extends MonkeySource {
   });
 
   static const defaultFactoryWeights = <RandomMonkeyEventFactory, int>{
-    TapAtEvent.randomFromBinding: 15,
-    LongPressAtEvent.randomFromBinding: 2,
-    DragFromEvent.randomFromBinding: 5,
-    FlingFromEvent.randomFromBinding: 2,
-    PopEvent.fromBinding: 1,
+    TapAtEvent.atRandomElement: 15,
+    LongPressAtEvent.atRandomElement: 2,
+    DragFromEvent.atRandomElement: 5,
+    FlingFromEvent.atRandomElement: 2,
+    PopEvent.ofRootNavigator: 1,
   };
 
   final Map<RandomMonkeyEventFactory, int> factoryWeights;

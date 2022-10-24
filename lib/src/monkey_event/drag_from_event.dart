@@ -14,7 +14,7 @@ class DragFromEvent extends MonkeyEvent {
     this.scrollable,
   );
 
-  static DragFromEvent? randomFromBinding(WidgetsBinding binding) {
+  static DragFromEvent? atRandomElement(WidgetsBinding binding) {
     final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) {

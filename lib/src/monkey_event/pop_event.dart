@@ -7,7 +7,7 @@ import '../monkey_event.dart';
 class PopEvent extends MonkeyEvent {
   PopEvent(this.center, this.navigatorState);
 
-  static PopEvent fromBinding(WidgetsBinding binding) {
+  static PopEvent ofRootNavigator(WidgetsBinding binding) {
     final navigatorState = findRootNavigatorState(binding.renderViewElement!);
     final size = binding.window.physicalSize / binding.window.devicePixelRatio;
     return PopEvent(size.center(Offset.zero), navigatorState);

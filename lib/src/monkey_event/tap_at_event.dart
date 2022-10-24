@@ -7,7 +7,7 @@ import '../monkey_event.dart';
 class TapAtEvent extends MonkeyEvent {
   TapAtEvent(this.location);
 
-  static TapAtEvent? randomFromBinding(WidgetsBinding binding) {
+  static TapAtEvent? atRandomElement(WidgetsBinding binding) {
     final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) =>

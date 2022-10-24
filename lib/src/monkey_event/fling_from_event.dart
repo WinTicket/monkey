@@ -13,7 +13,7 @@ class FlingFromEvent extends MonkeyEvent {
     this.offset,
   );
 
-  static FlingFromEvent? randomFromBinding(WidgetsBinding binding) {
+  static FlingFromEvent? atRandomElement(WidgetsBinding binding) {
     final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) {

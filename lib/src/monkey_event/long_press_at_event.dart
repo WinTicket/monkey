@@ -7,7 +7,7 @@ import '../monkey_event.dart';
 class LongPressAtEvent extends MonkeyEvent {
   LongPressAtEvent(this.location);
 
-  static LongPressAtEvent? randomFromBinding(WidgetsBinding binding) {
+  static LongPressAtEvent? atRandomElement(WidgetsBinding binding) {
     final element = chooseRandomElement(
       binding.renderViewElement!,
       test: (e) =>
