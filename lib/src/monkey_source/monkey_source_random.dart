@@ -40,7 +40,13 @@ class MonkeySourceRandom extends MonkeySource {
   }
 
   RandomMonkeyEventFactory _randomFactory() {
-    final sumOfWeight = factoryWeights.values.fold(0, (prev, e) => prev + e);
+    final sumOfWeight = factoryWeights.values.fold(0, (prev, e) {
+      if (e < 0) throw StateError('Weight cannot less than 0.');
+      return prev + e;
+    });
+    if (sumOfWeight <= 0) {
+      throw StateError('Sum of weight must bigger than 0.');
+    }
     var rnd = random.nextInt(sumOfWeight);
     RandomMonkeyEventFactory? eventFactory;
     for (final entry in factoryWeights.entries) {

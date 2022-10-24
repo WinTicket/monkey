@@ -32,8 +32,13 @@ class Monkey {
     bool verbose = false,
   }) async {
     if (_running) return;
-    assert(duration > Duration.zero);
-    assert(throttle > Duration.zero);
+    if (duration <= Duration.zero) {
+      throw StateError('Duration must be bigger than ${Duration.zero}.');
+    }
+    if (throttle <= Duration.zero) {
+      throw StateError('Throttle must be bigger than ${Duration.zero}.');
+    }
+
     _running = true;
 
     final navigator =
@@ -46,15 +51,20 @@ class Monkey {
     _timer = Timer(duration, stop);
 
     while (_running) {
-      final event = source.nextEvent(_controller.binding);
-      if (verbose) {
-        debugPrint(event.toString());
+      try {
+        final event = source.nextEvent(_controller.binding);
+        if (verbose) {
+          debugPrint(event.toString());
+        }
+        _painter.value = _MonkeyEventPainter(event);
+        await Future.microtask(() => event.injectEvent(_controller));
+        await Future<void>.delayed(throttle);
+        _painter.value = null;
+        await Future<void>.delayed(paintThrottle);
+      } catch (_) {
+        stop();
+        rethrow;
       }
-      _painter.value = _MonkeyEventPainter(event);
-      await Future.microtask(() => event.injectEvent(_controller));
-      await Future<void>.delayed(throttle);
-      _painter.value = null;
-      await Future<void>.delayed(paintThrottle);
     }
   }
 
