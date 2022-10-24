@@ -11,6 +11,7 @@ class DragFromEvent extends MonkeyEvent {
   DragFromEvent(
     this.startLocation,
     this.offset,
+    this.scrollable,
   );
 
   static DragFromEvent? randomFromBinding(WidgetsBinding binding) {
@@ -51,11 +52,13 @@ class DragFromEvent extends MonkeyEvent {
     return DragFromEvent(
       location - halfOffset,
       halfOffset * 2,
+      (element as StatefulElement).state as ScrollableState,
     );
   }
 
   final Offset startLocation;
   final Offset offset;
+  final ScrollableState scrollable;
 
   @override
   Future<void> injectEvent(WidgetController controller) async {
@@ -64,6 +67,9 @@ class DragFromEvent extends MonkeyEvent {
       offset,
       const Duration(milliseconds: 100),
     );
+    while (scrollable.position.isScrollingNotifier.value) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
   }
 
   @override
@@ -106,6 +112,6 @@ class DragFromEvent extends MonkeyEvent {
 
   @override
   String toString() {
-    return 'FlingFromEvent(startLocation: $startLocation, offset: $offset)';
+    return 'DragFromEvent(startLocation: $startLocation, offset: $offset)';
   }
 }
