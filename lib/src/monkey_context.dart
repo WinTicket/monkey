@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'element.dart';
+import 'key.dart';
 import 'random.dart';
 
 abstract class MonkeyContext {
@@ -106,14 +107,18 @@ class _DepthFirstChildIterator implements Iterator<Element> {
 
   @override
   bool moveNext() {
-    if (_stack.isEmpty) {
-      return false;
+    while (_stack.isNotEmpty) {
+      final element = _stack.removeLast();
+      if (element.widget.key is StopMonkeyKey) {
+        continue;
+      }
+
+      _current = element;
+      _fillChildren(_current);
+      return true;
     }
 
-    _current = _stack.removeLast();
-    _fillChildren(_current);
-
-    return true;
+    return false;
   }
 
   void _fillChildren(Element element) {
