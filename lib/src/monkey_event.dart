@@ -255,4 +255,9 @@ class IdleEvent extends MonkeyEvent {
 
   @override
   void paintEvent(Canvas canvas) {}
+
+  @override
+  String toString() {
+    return 'IdleEvent()';
+  }
 }
