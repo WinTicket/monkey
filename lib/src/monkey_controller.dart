@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'element.dart';
 
 abstract class MonkeyController {
   Future<void> tapAt(Offset location);
@@ -11,15 +8,12 @@ abstract class MonkeyController {
   Future<void> dragFrom(Offset startLocation, Offset offset, Duration duration);
 
   Future<void> flingFrom(Offset startLocation, Offset offset, double speed);
-
-  Future<void> popBack();
 }
 
 class MonkeyControllerImpl extends MonkeyController {
-  MonkeyControllerImpl(this._controller, this._rootElement);
+  MonkeyControllerImpl(this._controller);
 
   final WidgetController _controller;
-  final Element _rootElement;
 
   @override
   Future<void> tapAt(Offset location) {
@@ -40,11 +34,5 @@ class MonkeyControllerImpl extends MonkeyController {
   @override
   Future<void> flingFrom(Offset startLocation, Offset offset, double speed) {
     return _controller.flingFrom(startLocation, offset, speed);
-  }
-
-  @override
-  Future<void> popBack() {
-    final navigator = findRootNavigatorState(_rootElement);
-    return navigator.maybePop();
   }
 }

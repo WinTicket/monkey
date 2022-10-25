@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monkey/src/element.dart';
-import 'package:monkey/src/monkey_event.dart';
-import 'package:monkey/src/monkey_source.dart';
-import 'package:monkey/src/monkey_source/monkey_source_random.dart';
+import 'element.dart';
+import 'monkey_controller.dart';
+import 'monkey_event.dart';
+import 'monkey_source.dart';
+import 'monkey_context.dart';
 
 class Monkey {
   Monkey._(WidgetsBinding binding)
@@ -50,14 +51,17 @@ class Monkey {
 
     _timer = Timer(duration, stop);
 
+    final monkeyContext = MonkeyContextImpl(_controller.binding);
+    final monkeyController = MonkeyControllerImpl(_controller);
+
     while (_running) {
       try {
-        final event = source.nextEvent(_controller.binding);
+        final event = source.nextEvent(monkeyContext);
         if (verbose) {
           debugPrint(event.toString());
         }
         _painter.value = _MonkeyEventPainter(event);
-        await Future.microtask(() => event.injectEvent(_controller));
+        await Future.microtask(() => event.injectEvent(monkeyController));
         await Future<void>.delayed(throttle);
         _painter.value = null;
         await Future<void>.delayed(paintThrottle);

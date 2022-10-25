@@ -6,6 +6,8 @@ import 'element.dart';
 import 'random.dart';
 
 abstract class MonkeyContext {
+  Size get size;
+
   Element get rootElement;
 
   Iterable<Element> get allElements;
@@ -15,10 +17,14 @@ abstract class MonkeyContext {
   bool hitTestable(Element element, {Alignment alignment});
 }
 
-class MonkeyEventImpl extends MonkeyContext {
-  MonkeyEventImpl(this._binding);
+class MonkeyContextImpl extends MonkeyContext {
+  MonkeyContextImpl(this._binding);
 
   final WidgetsBinding _binding;
+
+  @override
+  Size get size =>
+      _binding.window.physicalSize / _binding.window.devicePixelRatio;
 
   @override
   Element get rootElement => _binding.renderViewElement!;
