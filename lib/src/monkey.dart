@@ -29,7 +29,7 @@ class Monkey {
   Future<void> start({
     MonkeySource source = const MonkeySourceRandom(),
     Duration duration = const Duration(minutes: 1),
-    Duration throttle = const Duration(milliseconds: 300),
+    Duration throttle = const Duration(milliseconds: 200),
     bool verbose = false,
   }) async {
     if (_running) return;
@@ -62,9 +62,9 @@ class Monkey {
         }
         _painter.value = _MonkeyEventPainter(event);
         await Future.microtask(() => event.injectEvent(monkeyController));
-        await Future<void>.delayed(throttle);
+        await _controller.pump(throttle);
         _painter.value = null;
-        await Future<void>.delayed(paintThrottle);
+        await _controller.pump(paintThrottle);
       } catch (_) {
         stop();
         rethrow;

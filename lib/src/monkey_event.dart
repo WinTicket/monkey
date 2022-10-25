@@ -118,7 +118,7 @@ class DragFromEvent extends MonkeyEvent {
     if (location == null) return null;
 
     Offset halfOffset;
-    final offsetFactor = random.nextDouble() * 0.2;
+    final offsetFactor = random.nextDouble() * 0.2 + 0.1;
     switch (scrollable.axis) {
       case Axis.horizontal:
         halfOffset = Offset(box.size.width * offsetFactor, 0);
