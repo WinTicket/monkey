@@ -1,30 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'random.dart';
-
-Element? chooseRandomElement(
-  Element rootElement, {
-  bool Function(Element)? test,
-  bool skipOffstage = true,
-}) {
-  final allElements = collectAllElementsFrom(
-    rootElement,
-    skipOffstage: skipOffstage,
-  );
-  int i = 0;
-  Element? target;
-  for (final element in allElements) {
-    if (test?.call(element) == true) {
-      i++;
-      if (random.nextInt(i) == 0) {
-        target = element;
-      }
-    }
-  }
-  return target;
-}
 
 NavigatorState findRootNavigatorState(Element rootElement) {
   final allElements = collectAllElementsFrom(
@@ -50,22 +25,3 @@ RenderBox? getElementRenderBox(Element element) {
   }
   return element.renderObject! as RenderBox;
 }
-
-bool isElementHitTestable(
-  Element element,
-  WidgetsBinding binding, {
-  Alignment alignment = Alignment.center,
-}) {
-  final box = getElementRenderBox(element);
-  if (box == null) return false;
-  final absoluteOffset = box.localToGlobal(alignment.alongSize(box.size));
-  final hitResult = HitTestResult();
-  binding.hitTest(hitResult, absoluteOffset);
-  for (final HitTestEntry entry in hitResult.path) {
-    if (entry.target == element.renderObject) {
-      return true;
-    }
-  }
-  return false;
-}
-
