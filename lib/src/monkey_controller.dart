@@ -6,8 +6,6 @@ abstract class MonkeyController {
   Future<void> longPressAt(Offset location);
 
   Future<void> dragFrom(Offset startLocation, Offset offset, Duration duration);
-
-  Future<void> flingFrom(Offset startLocation, Offset offset, double speed);
 }
 
 class MonkeyControllerImpl extends MonkeyController {
@@ -29,10 +27,5 @@ class MonkeyControllerImpl extends MonkeyController {
   Future<void> dragFrom(
       Offset startLocation, Offset offset, Duration duration) {
     return _controller.timedDragFrom(startLocation, offset, duration);
-  }
-
-  @override
-  Future<void> flingFrom(Offset startLocation, Offset offset, double speed) {
-    return _controller.flingFrom(startLocation, offset, speed);
   }
 }

@@ -19,7 +19,6 @@ class MonkeySourceRandom extends MonkeySource {
     TapAtEvent.atRandomElement: 15,
     LongPressAtEvent.atRandomElement: 2,
     DragFromEvent.atRandomElement: 5,
-    FlingFromEvent.atRandomElement: 2,
     PopEvent.ofRootNavigator: 1,
   };
 
