@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monkey/src/monkey_context.dart';
 
@@ -13,6 +14,7 @@ abstract class MonkeySource {
 class MonkeySourceRandom extends MonkeySource {
   const MonkeySourceRandom({
     this.factoryWeights = defaultFactoryWeights,
+    this.skipTest,
   });
 
   static const defaultFactoryWeights = <MonkeyEventFactory, int>{
@@ -24,13 +26,15 @@ class MonkeySourceRandom extends MonkeySource {
   };
 
   final Map<MonkeyEventFactory, int> factoryWeights;
+  final bool Function(Element element)? skipTest;
 
   @override
   MonkeyEvent nextEvent(MonkeyContext context) {
     MonkeyEvent? event;
+    final contextWrapper = _MonkeySourceRandomContext(context, skipTest);
     while (event == null) {
       TestAsyncUtils.guardSync();
-      event = _randomFactory()(context);
+      event = _randomFactory()(contextWrapper);
     }
     return event;
   }
@@ -53,5 +57,19 @@ class MonkeySourceRandom extends MonkeySource {
       rnd -= entry.value;
     }
     return eventFactory!;
+  }
+}
+
+class _MonkeySourceRandomContext extends MonkeyContextWrapper {
+  _MonkeySourceRandomContext(super.context, this._skipTest);
+
+  final bool Function(Element element)? _skipTest;
+
+  @override
+  Element? randomElement({bool Function(Element)? test}) {
+    bool mergedTest(Element element) {
+      return [test, _skipTest].every((t) => t == null || t(element));
+    }
+    return super.randomElement(test: mergedTest);
   }
 }

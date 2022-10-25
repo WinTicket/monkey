@@ -67,6 +67,31 @@ class MonkeyContextImpl extends MonkeyContext {
   }
 }
 
+class MonkeyContextWrapper extends MonkeyContext {
+  MonkeyContextWrapper(this._context);
+
+  final MonkeyContext _context;
+
+  @override
+  Size get size => _context.size;
+
+  @override
+  Element get rootElement => _context.rootElement;
+
+  @override
+  Iterable<Element> get allElements => _context.allElements;
+
+  @override
+  bool hitTestable(Element element, {Alignment alignment = Alignment.center}) {
+    return _context.hitTestable(element, alignment: alignment);
+  }
+
+  @override
+  Element? randomElement({bool Function(Element p1)? test}) {
+    return _context.randomElement(test: test);
+  }
+}
+
 class _DepthFirstChildIterator implements Iterator<Element> {
   _DepthFirstChildIterator(Element rootElement) {
     _fillChildren(rootElement);
