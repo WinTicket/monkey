@@ -20,6 +20,7 @@ class MonkeySourceRandom extends MonkeySource {
     LongPressAtEvent.atRandomElement: 2,
     DragFromEvent.atRandomElement: 5,
     PopEvent.ofRootNavigator: 1,
+    IdleEvent.create: 3,
   };
 
   final Map<MonkeyEventFactory, int> factoryWeights;

@@ -243,3 +243,17 @@ class PopEvent extends MonkeyEvent {
     return 'PopEvent()';
   }
 }
+
+class IdleEvent extends MonkeyEvent {
+  static IdleEvent create(MonkeyContext context) => IdleEvent();
+
+  @override
+  Future<void> injectEvent(MonkeyController controller) async {
+    await TestAsyncUtils.guard(
+      () => Future.delayed(const Duration(milliseconds: 200)),
+    );
+  }
+
+  @override
+  void paintEvent(Canvas canvas) {}
+}
