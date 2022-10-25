@@ -92,7 +92,7 @@ class DragFromEvent extends MonkeyEvent {
   DragFromEvent(
     this.startLocation,
     this.offset,
-    this.scrollable,
+    this.duration,
   );
 
   static DragFromEvent? atRandomElement(MonkeyContext context) {
@@ -129,27 +129,26 @@ class DragFromEvent extends MonkeyEvent {
     }
     halfOffset = halfOffset * (random.nextBool() ? -1 : 1);
 
+    final duration = Duration(milliseconds: random.nextInt(901) + 100);
+
     return DragFromEvent(
       location - halfOffset,
       halfOffset * 2,
-      (element as StatefulElement).state as ScrollableState,
+      duration,
     );
   }
 
   final Offset startLocation;
   final Offset offset;
-  final ScrollableState scrollable;
+  final Duration duration;
 
   @override
   Future<void> injectEvent(MonkeyController controller) async {
     await controller.dragFrom(
       startLocation,
       offset,
-      const Duration(milliseconds: 100),
+      duration,
     );
-    while (scrollable.position.isScrollingNotifier.value) {
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
   }
 
   @override
