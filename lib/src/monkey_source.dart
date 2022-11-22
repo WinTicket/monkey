@@ -40,7 +40,7 @@ class MonkeySourceRandom extends MonkeySource {
   }
 
   MonkeyEventFactory _randomFactory() {
-    final sumOfWeight = factoryWeights.values.fold(0, (prev, e) {
+    final sumOfWeight = factoryWeights.values.fold(0, (int prev, e) {
       if (e < 0) throw StateError('Weight cannot less than 0.');
       return prev + e;
     });

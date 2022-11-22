@@ -84,7 +84,7 @@ class Monkey {
     return OverlayEntry(
       builder: (context) => ValueListenableBuilder(
         valueListenable: _painter,
-        builder: (context, painter, _) => CustomPaint(
+        builder: (context, CustomPainter? painter, _) => CustomPaint(
           painter: painter,
           child: ConstrainedBox(
             constraints: const BoxConstraints.expand(),
